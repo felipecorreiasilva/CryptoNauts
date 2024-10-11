@@ -10,7 +10,7 @@ contract CryptoNauts {
     
 
     struct Nauts {
-        uint256 id;
+        string email;
         string name;
         string role;
     }
@@ -25,6 +25,7 @@ contract CryptoNauts {
 
     constructor(){
         owner = msg.sender;
+        _nauts[0].email = "felipecorreiasilva@outlook.com";
         _nauts[0].name = "Felipe Correia Silva";
         _nauts[0].role = "Desenvolvedor Full Stack";
         nautsIds.push(0);
@@ -32,17 +33,15 @@ contract CryptoNauts {
     }
     
 
-    function nautsExistsByName(string calldata name) public view returns(bool){
+    function nautsExistsByEmail(string calldata _email) public view returns(bool){
         bool _nautsExists = false;
 
-        require(bytes(name).length >= 3, "Nome precisa conter pelo menos 3 digitos");
-
-        
+        require(bytes(_email).length >= 3, "Email precisa conter pelo menos 3 digitos");
 
         for (uint256 i = 0; i < nautsIds.length; i++) {
-            bool nameExists = (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked(_nauts[i].name)));
+            bool emailExists = (keccak256(abi.encodePacked(_email)) == keccak256(abi.encodePacked(_nauts[i].email)));
             
-            if (nameExists) {
+            if (emailExists) {
                 _nautsExists = true;
             }
         }
@@ -53,36 +52,35 @@ contract CryptoNauts {
     }
 
     // Registrar Navegantes
-    function createNauts(string calldata name, string calldata role) external onlyOwner {
-        bool _nautsExists = nautsExistsByName(name);
-
-        require(bytes(name).length >= 3, "Nome precisa conter pelo menos 3 digitos");
-        require(bytes(role).length >= 3, "Papel precisa conter pelo menos 3 digitos");
+    function createNauts(string calldata _email, string calldata _name, string calldata role) external onlyOwner {
+        bool _nautsExists = nautsExistsByEmail(_email);
 
         require(_nautsExists == bool(false),"Navegante existente");
+        require(bytes(_name).length >= 3, "Nome precisa conter pelo menos 3 digitos");
+        require(bytes(role).length >= 3, "Papel precisa conter pelo menos 3 digitos"); 
         
         // Adicionado novo id de navegante em nautsIds
 
         nautsIds.push(uint256(nautsIds.length));
-        _nauts[uint256(nautsIds.length)-1] = Nauts(uint256(nautsIds.length)-1, name, role);
-        emit NautsInfo(uint256(nautsIds.length)-1, name, role);
+        _nauts[uint256(nautsIds.length)-1] = Nauts(_email, _name, role);
+        emit NautsInfo(uint256(nautsIds.length)-1, _name, role);
         
        
 
     }
 
     // Registrar Navegantes
-    function updateNauts(uint256 id, string calldata newName, string calldata _newRole) external onlyOwner {
+    function updateNauts(uint256 id, string calldata _newEmail, string calldata _newName, string calldata _newRole) external onlyOwner {
         
-        bool _nautsExists = nautsExistsByName(newName);
+        bool _nautsExists = nautsExistsByEmail(_newEmail);
 
-        require(bytes(newName).length >= 3, "Nome precisa conter pelo menos 3 digitos");
+        require(bytes(_newName).length >= 3, "Nome precisa conter pelo menos 3 digitos");
         require(bytes(_newRole).length >= 3, "Papel precisa conter pelo menos 3 digitos");
         
         require(_nautsExists == bool(false),"Navegante existente");
         // Adicionado novo id de navegante em nautsIds
-        _nauts[id] = Nauts(id, newName, _newRole);
-        emit NautsInfo(id, newName, _newRole);
+        _nauts[id] = Nauts(_newEmail, _newName, _newRole);
+        emit NautsInfo(id, _newName, _newRole);
         
     }
 
@@ -91,6 +89,8 @@ contract CryptoNauts {
         
         return nautsIds.length;
     }
+
+    
 
     // Pega navegante por id
     function getNauts(uint256 id) external view returns (string memory, string memory) {
@@ -126,7 +126,7 @@ contract CryptoNauts {
     }
 
     modifier onlyOwner {
-        require(msg.sender == owner, "Somente o dono do contrato");
+        require(msg.sender == owner, "Somente o dono do contrato pode executar.");
         _;
     }
 
