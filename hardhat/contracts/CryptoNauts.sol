@@ -35,7 +35,7 @@ contract CryptoNauts {
     function nautsExistsByName(string calldata name) public view returns(bool){
         bool _nautsExists = false;
 
-        require(bytes(name).length == 3, "Nome precisa conter pelo menos 3 digitos");
+        require(bytes(name).length >= 3, "Nome precisa conter pelo menos 3 digitos");
 
         
 
@@ -56,15 +56,13 @@ contract CryptoNauts {
     function createNauts(string calldata name, string calldata role) external onlyOwner {
         bool _nautsExists = nautsExistsByName(name);
 
-        require(bytes(name).length == 3, "Nome precisa conter pelo menos 3 digitos");
-        require(bytes(role).length == 3, "Papel precisa conter pelo menos 3 digitos");
+        require(bytes(name).length >= 3, "Nome precisa conter pelo menos 3 digitos");
+        require(bytes(role).length >= 3, "Papel precisa conter pelo menos 3 digitos");
 
         require(_nautsExists == bool(false),"Navegante existente");
         
         // Adicionado novo id de navegante em nautsIds
-        if(nautsIds.length == 0) {
-           nautsIds.push(uint256(nautsIds.length)); 
-        }
+
         nautsIds.push(uint256(nautsIds.length));
         _nauts[uint256(nautsIds.length)-1] = Nauts(uint256(nautsIds.length)-1, name, role);
         emit NautsInfo(uint256(nautsIds.length)-1, name, role);
@@ -74,17 +72,17 @@ contract CryptoNauts {
     }
 
     // Registrar Navegantes
-    function updateNauts(uint256 id, string calldata name, string calldata role) external onlyOwner {
+    function updateNauts(uint256 id, string calldata newName, string calldata _newRole) external onlyOwner {
         
-        bool _nautsExists = nautsExistsByName(name);
+        bool _nautsExists = nautsExistsByName(newName);
 
-        require(bytes(name).length == 3, "Nome precisa conter pelo menos 3 digitos");
-        require(bytes(role).length == 3, "Papel precisa conter pelo menos 3 digitos");
+        require(bytes(newName).length >= 3, "Nome precisa conter pelo menos 3 digitos");
+        require(bytes(_newRole).length >= 3, "Papel precisa conter pelo menos 3 digitos");
         
-        require(_nautsExists == bool(true),"Navegante inexistente");
+        require(_nautsExists == bool(false),"Navegante existente");
         // Adicionado novo id de navegante em nautsIds
-        _nauts[id] = Nauts(id, name, role);
-        emit NautsInfo(id, name, role);
+        _nauts[id] = Nauts(id, newName, _newRole);
+        emit NautsInfo(id, newName, _newRole);
         
     }
 
