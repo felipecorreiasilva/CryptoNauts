@@ -9,7 +9,7 @@ const AuthContext = createContext({
     setAccount: function (value:any) { return value },
     connectWallet: function () {},
     disconnectWallet: function () {},
-    
+
 });
 
 interface AuthProviderProps {
@@ -34,54 +34,48 @@ export const AuthProvider : React.FC<AuthProviderProps> = ({children}) => {
         console.log('Requesting account: ')
 
         if (!window.ethereum) return alert('Meta mask not detected')
-
             console.log('detected')
-            try {
-                const accounts = await window.ethereum.request({
-                    method: 'eth_requestAccounts',
-                });
-                console.log(accounts)
-                setAccount(accounts)
-                return accounts
-            }catch(err){
-                console.log('error: ', err)
-            }
-        
+        try {
+            const accounts = await window.ethereum.request({
+                method: 'eth_requestAccounts',
+            });
+            console.log(accounts)
+            setAccount(accounts)
+            return accounts
+        } catch(err) {
+            console.log('error: ', err)
+        }
+
     }
 
     const connectWallet= async() => {
         if (!window.ethereum) return alert('Meta mask not detected')
-            await requestAccount();
 
-            // const provider = new ethers.providers.AlchemyProvider('optimism', API_KEY_TEST_NETWORK)
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const signer = provider.getSigner()
-            // const erc20 = new ethers.Contract()
-            
+        await requestAccount();
 
-        
-        
+        // const provider = new ethers.providers.AlchemyProvider('optimism', API_KEY_TEST_NETWORK)
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = provider.getSigner()
+        // const erc20 = new ethers.Contract()
     }
 
     const disconnectWallet = async() => {
         if (!window.ethereum) return alert('Meta mask not detected')
-            
+
             console.log('detected')
-            try {
-                await window.ethereum.request({
-                    "method": "wallet_revokePermissions",
-                    "params": [
-                      {
-                        "eth_accounts": {}
-                      }
-                    ]
-                  });
-                setAccount(null)
-            }catch(err){
-                console.log('error: ', err)
-            }
-        
-        
+        try {
+            await window.ethereum.request({
+                "method": "wallet_revokePermissions",
+                "params": [
+                    {
+                    "eth_accounts": {}
+                    }
+                ]
+                });
+            setAccount(null)
+        } catch(err) {
+            console.log('error: ', err)
+        }
     }
 
     useEffect(() => {
@@ -102,20 +96,16 @@ export const AuthProvider : React.FC<AuthProviderProps> = ({children}) => {
         verifyAccount()
     }, []);
 
-    
-
     const value = {
         account,
         setAccount,
         connectWallet,
         disconnectWallet
-
     }
 
-
     return (
-    <AuthContext.Provider value={value}>
-        {children}
-    </AuthContext.Provider>
-);
+        <AuthContext.Provider value={value}>
+            {children}
+        </AuthContext.Provider>
+    );
 };

@@ -19,18 +19,15 @@ const MainContainer = (props:PropsMainContainer) => {
     {isClient &&
       <div className='flex flex-col h-screen'>
         <Header />
-        <main className="my-64 flex justify-center items-center">
-          
-            {props.children}
-
+        <main>
+          {props.children}
         </main>
-        
     </div>
     }
     </>
-    
-    
-    
+
+
+
   )
 }
 

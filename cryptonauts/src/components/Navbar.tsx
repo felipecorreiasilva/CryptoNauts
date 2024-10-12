@@ -7,73 +7,36 @@ import { IoMenu } from 'react-icons/io5'
 import { useAuth } from '@/context/AuthContext'
 
 const Navbar = () => {
-    const {connectWallet,disconnectWallet,account} = useAuth()
-    
+    const { connectWallet, disconnectWallet, account } = useAuth()
 
   return (
-    <nav className='fixed w-full bg-primary-950 scroll'>
+    <nav className="bg-gray-800 p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        {/* Project Title */}
+        <div className="text-white text-lg font-bold">
+          CryptoNauts
+        </div>
 
-        <ul className='hidden sm:flex justify-between p-8 text-white'>
-            <div className="">
-                <li className='p-2'>
-                    <Link
-                    className='font-fontTitleHomeb text-blue-900 shadow-2xl'
-                    href={'/'}
-
-                    >CryptoNauts</Link>
-                </li>
-            </div>
-
-            <div className="sm:flex space-x-8">
-                
-                    {links.map((link:any, i:number)=>{
-                        return (
-                            <div key={i}>
-                            { i != 2 ? (
-                                <li className={`hover:border-b hover:border-b-blue-900 hover:text-blue-900 p-2  `} key={i}>
-                                <Link href={link.path}>{link.name}</Link>
-                                </li> 
-
-                            ):<>
-                                {!account?
-                                (<button onClick={connectWallet} className='border-2 text-blue-900 hover:text-white border-blue-900 
-                                rounded-lg hover:bg-blue-900 p-2'>{link.name}</button>)
-                                :
-                                (
-                                (<button onClick={disconnectWallet} className='border-2 text-blue-900 hover:text-white border-blue-900 
-                                rounded-lg hover:bg-blue-900 p-2'>Disconnect</button>)
-                                )
-                                }
-                                
-                            </>
-                            
-                            }
-                            </div>
-                            
-                        )
-                    })}
-                
-            </div>
-            
-        </ul>
-        
-        <ul className='sm:hidden flex justify-between p-8'>
-            
-                <li>
-                    <Link
-                    href={'/'}
-
-                    >Game Store</Link>
-                </li>
-            
-                <li className=''>
-                    <button className='h-6 w-6'>
-                        <IoMenu />
-                    </button>
-                    
-                </li>
-        </ul>
-        
+        {/* Links and Button */}
+        <div className="flex items-center space-x-6">
+            <Link href="/" className="text-gray-300 hover:text-white">
+              Home
+            </Link>
+            <Link href="/about" className="text-gray-300 hover:text-white">
+                About
+            </Link>
+            <Link href="/contact" className="text-gray-300 hover:text-white">
+                Contact
+            </Link>
+            {!account ?
+                (<button onClick={connectWallet} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Connect Wallet</button>)
+                :
+                (
+                (<button onClick={disconnectWallet} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Disconnect</button>)
+                )
+            }
+        </div>
+      </div>
     </nav>
   )
 }
