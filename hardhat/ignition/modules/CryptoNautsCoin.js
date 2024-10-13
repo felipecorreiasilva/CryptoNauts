@@ -3,9 +3,10 @@
 
 const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
 
-module.exports = buildModule("CryptoNautsModule", (m) => {
+module.exports = buildModule("CryptoNautsCoinModule", (m) => {
   
-  const cryptoNauts = m.contract("CryptoNauts", []);
+  const cryptoNautsCoin = m.contract("CryptoNautsCoin");
 
-  return { cryptoNauts };
+  return { cryptoNautsCoin };
+  
 });
