@@ -1,13 +1,46 @@
 import UserForm from "@/components/UserForm";
 import UserTable from "@/components/UserTable";
 import { useAuth } from "@/context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { setData, getData } from '../lib/contractFunctions';
 
 export default function Home() {
   const { connectWallet, account } = useAuth()
   const [nauts, setNauts] = useState<any[]>([])
   const [isFormVisible, setFormVisible] = useState(false);
   const [isTableVisible, setTableVisible] = useState(false);
+  const [contractData, setContractData] = useState(null);
+  const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getData();
+      setContractData(data);
+      console.log(data)
+    };
+    fetchData();
+  }, []);
+
+  const handleSetData = async () => {
+    if (inputValue !== '') {
+      // Convert input to a number before passing to the contract
+      const parsedValue = parseInt(inputValue, 10);
+
+      // Ensure the value is a valid number
+      if (isNaN(parsedValue)) {
+        alert("Please enter a valid number.");
+        return;
+      }
+
+      // Call setData with the parsed value
+      await setData(parsedValue);
+
+      // Fetch the updated data after the transaction is confirmed
+      const updatedData = await getData();
+      setContractData(updatedData);
+    }
+  };
+
 
   const LoadNauts = async() => {
     setTableVisible(true);
@@ -66,6 +99,29 @@ export default function Home() {
 
         </>
       }
+
+      <div className="mb-4 text-white">
+        <strong>Stored Data in Contract:</strong> {contractData !== null ? contractData : 'Loading...'}
+      </div>
+
+      {/* Input to set new data */}
+      <div className="mb-4">
+        <input
+          type="number"
+          placeholder="Enter new data"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          className="border p-2 rounded"
+        />
+      </div>
+
+      {/* Button to set data */}
+      <button
+        onClick={handleSetData}
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        Set Data
+      </button>
 
     </div>
   );
