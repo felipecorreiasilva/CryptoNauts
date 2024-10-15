@@ -18,7 +18,7 @@ contract CryptoNautsCoin is ERC20 {
     }
 
     modifier onlyOwner {
-        require(msg.sender == owner, "Somente o dono do contrato");
+        require(msg.sender == owner, "Only the owner of the contract can execute.");
         _;
     }
     
