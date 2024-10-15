@@ -10,16 +10,17 @@ const UserTable = ({ users }) => {
           </tr>
         </thead>
         <tbody>
-          {users.length === 0 && (
+          {users && users.length > 0 ? (
+            users.map((user, index) => (
+              <tr key={user.email} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{user.name}</td>
+                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{user.email}</td>
+                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{user.role}</td>
+              </tr>
+            ))
+          ) : (
             <tr><td colSpan={3} className="text-center py-4">No users found</td></tr>
           )}
-          {users.map((user, index) => (
-            <tr key={user.email} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-              <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{user.name}</td>
-              <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{user.email}</td>
-              <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{user.role}</td>
-            </tr>
-          ))}
         </tbody>
       </table>
     </div>
