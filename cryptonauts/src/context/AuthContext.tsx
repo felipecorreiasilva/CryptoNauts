@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // const provider = new ethers.providers.AlchemyProvider('optimism', process.env.ALCHEMY_API_KEY);
         // const provider = new ethers.providers.JsonRpcProvider(process.env.ALCHEMY_TESTNET_PROVIDER_URL);
         // const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const privateKey = String(process.env.WALLET_PRIVATE_KEY_B);
+        const privateKey = String(process.env.WALLET_PRIVATE_KEY);
         const apiAlchemy = String(process.env.ALCHEMY_TESTNET_PROVIDER_URL);
         const provider = ethers.getDefaultProvider(apiAlchemy)
               
