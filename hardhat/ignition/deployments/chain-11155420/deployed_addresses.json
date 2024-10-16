@@ -1,4 +1,5 @@
 {
   "CryptoNautsCoinModule#CryptoNautsCoin": "0x7Bf75dDb81D0214C8878aF84DB7Fcd83A0E86DD6",
-  "CryptoNautsModule#CryptoNauts": "0x925f1Ba92c430B7134c1da7a6DA358096F7c972d"
+  "CryptoNautsModule#CryptoNauts": "0x925f1Ba92c430B7134c1da7a6DA358096F7c972d",
+  "CryptoNautsSaleModule#CryptoNautsSale": "0x97118941b98Fa09d5A3F345a02c9f059C419D6d7"
 }
