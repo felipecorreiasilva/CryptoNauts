@@ -13,7 +13,7 @@ const Hero = () => {
                 <p className=''>A muito tempo procuramos um novo planeta para viver.</p>
                 <p className=''>Se torne mais um em nossa lista de navegantes.</p>
                 
-                  <p className='sm:flex'>Registros de navegantes em rede blockchain
+                  <p className='sm:flex'>Registros de navegantes em rede blockchain.
                   <Link className='flex sm:ml-1 justify-center text-cyan-600' href="/signUpNauts">Inscrever-se <FaArrowRight className='my-auto ml-1'/></Link>
                   </p>
                   
