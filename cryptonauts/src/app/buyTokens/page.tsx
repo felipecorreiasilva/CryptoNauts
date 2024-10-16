@@ -30,7 +30,7 @@ const page = () => {
         amount: 0,
       });
 
-    const [contractBalanceOf, setContractBalanceOf] = useState();
+    const [contractBalanceOf, setContractBalanceOf] = useState<Number|null>();
 
       useEffect(() => {
         const handleFetchData = async() => {
@@ -38,12 +38,12 @@ const page = () => {
           const contractCNCoin = new ethers.Contract(addressCNCoin, ABI[0], signer);
           await contractCNCoin.waitForDeployment();
           const balanceOf = await contractCNCoin.balanceOf(process.env.ADDRESS_CNSALE);
-          console.log(Number(balanceOf)/1e18)
+          console.log((Number(balanceOf)/1e2).toFixed(2))
           setContractBalanceOf(balanceOf);
 
         }
         handleFetchData()
-      }, [])
+      }, [contractBalanceOf])
 
     const handleOnChange = (e:any)=> {
 
@@ -84,15 +84,15 @@ const page = () => {
           nonce,
           value: ethers.parseUnits(requiredEther, 'ether'),
         }
-      
+        
         let rawTransaction = await signer.signTransaction(options);
         console.log("rawTransaction", rawTransaction)
-        contractCNSale.buyToken(formData.amount, {...options}).then(async (buyToken)=>{
+        contractCNSale.buyToken(formData.amount, Number(formData.amount*1e2), {...options}).then(async (buyToken)=>{
         let _response = await buyToken.wait();
         console.log('buyToken', buyToken)
         console.log('_response', _response)
         toast.success(`Parabéns compra realizada com sucesso`)
-        
+        setContractBalanceOf(null)
         }).catch (async(error:any) =>{
 
           const errorDecoder = ErrorDecoder.create()
@@ -113,7 +113,7 @@ const page = () => {
             <MdGeneratingTokens className='text-yellow-600 w-12 h-12' />
             
             </div>
-            <p className="flex justify-center pt-2 pb-16 text-white">{contractBalanceOf && Number(contractBalanceOf)/1e18}</p>
+            <p className="flex justify-center pt-2 pb-16 text-white">{contractBalanceOf ? (Number(contractBalanceOf)/1e2).toFixed(2):0}</p>
             
         </CardTitle>
             
