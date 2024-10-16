@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.27;
+pragma solidity ^0.8.19;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
@@ -18,7 +18,7 @@ contract CryptoNautsCoin is ERC20 {
     }
 
     modifier onlyOwner {
-        require(msg.sender == owner, "Somente o dono do contrato");
+        require(msg.sender == owner, "Only the owner of the contract can execute.");
         _;
     }
     

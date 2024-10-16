@@ -2,7 +2,7 @@ require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.27",
+  solidity: "0.8.19",
   networks: {
     opsepolia: {
       url: process.env.ALCHEMY_TESTNET_PROVIDER_URL,
