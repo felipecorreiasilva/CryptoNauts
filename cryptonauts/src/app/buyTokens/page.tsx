@@ -71,8 +71,8 @@ const page = () => {
 
         const gasPrice = (await provider.getFeeData()).gasPrice;
         const gasLimit = 5000000;
-        const getTokenPrice = await contractCNSale.getTokenPrice();
         
+        const getTokenPrice = await contractCNSale.getTokenPrice();
         const getETHPrice = await contractCNSale.getETHPrice();
         const totalCostInUSD = Number(getTokenPrice)*formData.amount;
         

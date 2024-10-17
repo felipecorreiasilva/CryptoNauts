@@ -18,13 +18,13 @@ const Navbar = () => {
   return (
     <>
     {isClient &&
-    <nav className='fixed container z-10 w-full bg-primary-950'>
+    <nav className='fixed container z-1 w-full bg-primary-950'>
 
         <ul className='hidden sm:flex justify-between p-8 text-white'>
             <div className="">
                 <li className='p-2'>
                     <Link
-                    className='font-fontTitleHomeb text-blue-900 font-extrabold shadow-2xl'
+                    className='font-fontTitleHomeb text-blue-900 font-extrabold'
                     href={'/'}
 
                     >CryptoNauts</Link>
@@ -68,7 +68,7 @@ const Navbar = () => {
             
                 <li>
                     <Link
-                    className='font-fontTitleHomeb text-blue-900 font-extrabold shadow-2xl'
+                    className='font-fontTitleHomeb text-blue-900 font-extrabold'
                     href={'/'}
 
                     >CryptoNauts</Link>

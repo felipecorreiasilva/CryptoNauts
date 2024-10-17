@@ -77,7 +77,7 @@ const page = () => {
           const _getPriceRegister = await contractCNauts.getPriceRegister();
           const balance = await contractCNCoin.balanceOf(account[0])
           console.log(balance);
-          let _transfer = await contractCNCoin.transfer(process.env.ADDRESS_CNSALE, BigInt(Number(_getPriceRegister)*1e18));
+          let _transfer = await contractCNCoin.transfer(process.env.ADDRESS_CNSALE, BigInt(Number(_getPriceRegister)*1e2));
           
           let _response = await _transfer.wait();
           console.log('signUpNauts: ', signUpNauts)
