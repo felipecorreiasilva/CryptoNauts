@@ -126,7 +126,7 @@ const page = () => {
                   value={formData.username}
                   onChange={handleOnChange}
                   type="text" />
-                  <p className='absolute
+                  <p className='text-white absolute
                   peer-focus:-translate-y-5 peer-focus:text-sm left-0 top-[6px] ml-2 px-2 duration-300 bg-primary-900 peer-valid:text-sm peer-valid:-translate-y-5'>
                   Nome
                   <span 
@@ -148,7 +148,7 @@ const page = () => {
                   value={formData.email}
                   onChange={handleOnChange}
                   type="email" />
-                  <p className='absolute
+                  <p className='text-white absolute
                   peer-focus:-translate-y-5 peer-focus:text-sm left-0 top-[6px] ml-2 px-2 duration-300 bg-primary-900 peer-valid:text-sm peer-valid:-translate-y-5'>
                   Endereço de email
                   <span 
@@ -157,6 +157,7 @@ const page = () => {
                   </p>
                   
                 </label>
+
 
                 <label className="relative">
                   

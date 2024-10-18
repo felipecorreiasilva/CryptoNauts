@@ -34,13 +34,14 @@ contract CryptoNauts {
         priceRegister = 5000;
         _nauts[0].email = "felipecorreiasilva@outlook.com";
         _nauts[0].name = "Felipe Correia Silva";
-        _nauts[0].role = "Piloto";
+        _nauts[0].role = "Engineer";
         nautsIds.push(0);
         
     }
     
 
     function nautsExistsByEmail(string calldata _email) public view returns(bool){
+        
         bool _nautsExists = false;
 
         require(bytes(_email).length >= 3, "Email must contain at least 3 digits.");
@@ -62,8 +63,8 @@ contract CryptoNauts {
     function createNauts(string calldata _email, string calldata _name, string calldata _role) public {
         bool _nautsExists = nautsExistsByEmail(_email);
 
-        require(_nautsExists == bool(false),"Existing browser");
         require(bytes(_name).length >= 3, "Name must contain at least 3 digits.");
+        require(_nautsExists == bool(false),"Existing browser");
         require(bytes(_role).length >= 3, "Role must contain at least 3 digits."); 
         
         // check that the sale contract provides the enough tokens to make this transaction
@@ -72,9 +73,7 @@ contract CryptoNauts {
         // Adicionado novo id de navegante em nautsIds
         nautsIds.push(uint256(nautsIds.length));
         _nauts[uint256(nautsIds.length)-1] = Nauts(_email, _name, _role);
-        emit NautsInfo(uint256(nautsIds.length)-1, _name, _role);
-        
-
+        emit NautsInfo(uint256(nautsIds.length)-1, _name, _role); 
 
     }
     
@@ -84,10 +83,11 @@ contract CryptoNauts {
         
         bool _nautsExists = nautsExistsByEmail(_newEmail);
 
+        require(bytes(_nauts[_id].name).length > 0, "Non-existent navigation");
         require(bytes(_newName).length >= 3, "Name must contain at least 3 digits.");
-        require(bytes(_newRole).length >= 3, "Role must contain at least 3 digits.");
+        require(_nautsExists == bool(false),"Existing browser");
+        require(bytes(_newRole).length >= 3, "Role must contain at least 3 digits."); 
         
-        require(_nautsExists == bool(false),"Navegante existente");
         // Adicionado novo id de navegante em nautsIds
         _nauts[id] = Nauts(_newEmail, _newName, _newRole);
         emit NautsInfo(id, _newName, _newRole);
