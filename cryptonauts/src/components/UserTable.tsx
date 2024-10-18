@@ -191,26 +191,7 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
                         <h3 className="text-lg font-black text-white mb-8">Atualizar</h3>
                         <form>
                       <div className="flex flex-col space-y-4 w-[80%] mx-auto">
-                      <label className="relative">
-                  
-                  <input 
-                  required
-                  name='newEmail'
-                  placeholder='Digite seu endereço de email' 
-                  className="duration-300 placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-xs shadow-md text-white border rounded-md outline-none 
-                  focus:border-stone-950 peer pl-[16px] p-[6px] bg-inherit w-full"
-                  value={formEditData.newEmail}
-                  onChange={handleOnChange}
-                  type="email" />
-                  <p className='text-white absolute
-                  peer-focus:-translate-y-5 peer-focus:text-sm left-0 top-[6px] ml-2 px-2 duration-300 bg-primary-900 peer-valid:text-sm peer-valid:-translate-y-5'>
-                  Endereço de email
-                  <span 
-                  className='text-red-500 ml-1'>
-                  *</span>
-                  </p>
-                  
-                </label>
+                      
 
                 <label className="relative">
                   
@@ -234,7 +215,26 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
                   
                 </label>
 
-                
+                <label className="relative">
+                  
+                  <input 
+                  required
+                  name='newEmail'
+                  placeholder='Digite seu endereço de email' 
+                  className="duration-300 placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-xs shadow-md text-white border rounded-md outline-none 
+                  focus:border-stone-950 peer pl-[16px] p-[6px] bg-inherit w-full"
+                  value={formEditData.newEmail}
+                  onChange={handleOnChange}
+                  type="email" />
+                  <p className='text-white absolute
+                  peer-focus:-translate-y-5 peer-focus:text-sm left-0 top-[6px] ml-2 px-2 duration-300 bg-primary-900 peer-valid:text-sm peer-valid:-translate-y-5'>
+                  Endereço de email
+                  <span 
+                  className='text-red-500 ml-1'>
+                  *</span>
+                  </p>
+                  
+                </label>
 
                 <label className="relative">
                   

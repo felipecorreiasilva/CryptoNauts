@@ -119,27 +119,6 @@ const page = () => {
                   
                   <input 
                   required
-                  name='email'
-                  placeholder='Digite seu endereço de email' 
-                  className="duration-300 placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-xs shadow-md text-neutral-500 border rounded-md outline-none 
-                  focus:border-stone-950 peer pl-[16px] p-[6px] bg-inherit w-full"
-                  value={formData.email}
-                  onChange={handleOnChange}
-                  type="email" />
-                  <p className='text-white absolute
-                  peer-focus:-translate-y-5 peer-focus:text-sm left-0 top-[6px] ml-2 px-2 duration-300 bg-primary-900 peer-valid:text-sm peer-valid:-translate-y-5'>
-                  Endereço de email
-                  <span 
-                  className='text-red-500 ml-1'>
-                  *</span>
-                  </p>
-                  
-                </label>
-
-                <label className="relative">
-                  
-                  <input 
-                  required
                   name='username'
                   placeholder='Digite seu nome completo' 
                   className="duration-300 placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-xs shadow-md text-neutral-500 border rounded-md outline-none 
@@ -155,6 +134,27 @@ const page = () => {
                   *</span>
                   </p>
                   
+                  
+                </label>
+
+                <label className="relative">
+                  
+                  <input 
+                  required
+                  name='email'
+                  placeholder='Digite seu endereço de email' 
+                  className="duration-300 placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-xs shadow-md text-neutral-500 border rounded-md outline-none 
+                  focus:border-stone-950 peer pl-[16px] p-[6px] bg-inherit w-full"
+                  value={formData.email}
+                  onChange={handleOnChange}
+                  type="email" />
+                  <p className='text-white absolute
+                  peer-focus:-translate-y-5 peer-focus:text-sm left-0 top-[6px] ml-2 px-2 duration-300 bg-primary-900 peer-valid:text-sm peer-valid:-translate-y-5'>
+                  Endereço de email
+                  <span 
+                  className='text-red-500 ml-1'>
+                  *</span>
+                  </p>
                   
                 </label>
 
