@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.27;
+pragma solidity ^0.8.19;
 
 import "./CryptoNautsCoin.sol";
 import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
@@ -25,16 +25,17 @@ contract CryptoNautsSale {
 
     mapping (uint256 => Transaction) public transaction;
 
-    constructor(CryptoNautsCoin _token) {
+    fallback() external payable { }
+    receive() external payable { }
+
+    constructor(CryptoNautsCoin _token, address _priceFeed) {
         
-        priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+        priceFeed = AggregatorV3Interface(_priceFeed);
         tokenPriceUSD = 500; // 5.00 USD = 5 USD
         token = _token;
         owner = payable(msg.sender);
 
     }
-    
-    function deposit() public payable {}
 
     function getTransactionCount() external view returns(uint256) {
         return transactionCount;
@@ -72,7 +73,7 @@ contract CryptoNautsSale {
         return requiredEther;
     }
 
-    function buyToken(uint256 _amount) public payable {
+    function buyToken(uint256 _amount, uint256 _amountDecimals) public payable {
         
         UD60x18 _calculateTokenPrice = calculateTokenPrice(_amount);
         UD60x18 msgValue = ud(uint(msg.value));
@@ -87,9 +88,8 @@ contract CryptoNautsSale {
         
         // Faz a transação dentro do require
         // transferência retorna um valor booleano.
-        require(token.transfer(msg.sender, _amount));
-        // Transfer the ETH of the buyer to us
-        deposit();
+        require(token.transfer(msg.sender, _amountDecimals));
+
         // Increase the amount of tokens sold
         tokensSold += _amount;
         // Increase the amount of transactions
@@ -112,7 +112,7 @@ contract CryptoNautsSale {
     }
 
     modifier onlyOwner {
-        require(msg.sender == owner, "Somente o dono do contrato");
+        require(msg.sender == owner, "Only the owner of the contract can execute.");
         _;
     }
     

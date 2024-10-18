@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.27;
+pragma solidity ^0.8.19;
 
 import "./CryptoNautsCoin.sol";
 import "./CryptoNautsSale.sol";
@@ -34,16 +34,17 @@ contract CryptoNauts {
         priceRegister = 5000;
         _nauts[0].email = "felipecorreiasilva@outlook.com";
         _nauts[0].name = "Felipe Correia Silva";
-        _nauts[0].role = "Piloto";
+        _nauts[0].role = "Engineer";
         nautsIds.push(0);
         
     }
     
 
     function nautsExistsByEmail(string calldata _email) public view returns(bool){
+        
         bool _nautsExists = false;
 
-        require(bytes(_email).length >= 3, "Email precisa conter pelo menos 3 digitos");
+        require(bytes(_email).length >= 3, "Email must contain at least 3 digits.");
 
         for (uint256 i = 0; i < nautsIds.length; i++) {
             bool emailExists = (keccak256(abi.encodePacked(_email)) == keccak256(abi.encodePacked(_nauts[i].email)));
@@ -59,22 +60,20 @@ contract CryptoNauts {
     }
 
     // Registrar Navegantes
-    function createNauts(string calldata _email, string calldata _name, string calldata _role) public returns(bool) {
+    function createNauts(string calldata _email, string calldata _name, string calldata _role) public {
         bool _nautsExists = nautsExistsByEmail(_email);
 
-        require(_nautsExists == bool(false),"Navegante existente");
-        require(bytes(_name).length >= 3, "Nome precisa conter pelo menos 3 digitos");
-        require(bytes(_role).length >= 3, "Papel precisa conter pelo menos 3 digitos"); 
+        require(bytes(_name).length >= 3, "Name must contain at least 3 digits.");
+        require(_nautsExists == bool(false),"Existing browser");
+        require(bytes(_role).length >= 3, "Role must contain at least 3 digits."); 
         
         // check that the sale contract provides the enough tokens to make this transaction
-        require(token.balanceOf(msg.sender) >= priceRegister, "Tokens insuficientes");
+        require(token.balanceOf(msg.sender) >= priceRegister, "Not enough tokens.");
 
         // Adicionado novo id de navegante em nautsIds
         nautsIds.push(uint256(nautsIds.length));
         _nauts[uint256(nautsIds.length)-1] = Nauts(_email, _name, _role);
-        emit NautsInfo(uint256(nautsIds.length)-1, _name, _role);
-        return true;
-
+        emit NautsInfo(uint256(nautsIds.length)-1, _name, _role); 
 
     }
     
@@ -84,10 +83,11 @@ contract CryptoNauts {
         
         bool _nautsExists = nautsExistsByEmail(_newEmail);
 
-        require(bytes(_newName).length >= 3, "Nome precisa conter pelo menos 3 digitos");
-        require(bytes(_newRole).length >= 3, "Papel precisa conter pelo menos 3 digitos");
+        require(bytes(_nauts[_id].name).length > 0, "Non-existent navigation");
+        require(bytes(_newName).length >= 3, "Name must contain at least 3 digits.");
+        require(_nautsExists == bool(false),"Existing browser");
+        require(bytes(_newRole).length >= 3, "Role must contain at least 3 digits."); 
         
-        require(_nautsExists == bool(false),"Navegante existente");
         // Adicionado novo id de navegante em nautsIds
         _nauts[id] = Nauts(_newEmail, _newName, _newRole);
         emit NautsInfo(id, _newName, _newRole);
@@ -109,7 +109,7 @@ contract CryptoNauts {
 
     // Pega navegante por id
     function getNauts(uint256 id) external view returns (string memory, string memory) {
-        require(bytes(_nauts[id].name).length > 0, "Navegante inexistente");
+        require(bytes(_nauts[id].name).length > 0, "Non-existent browser.");
         Nauts storage nauts = _nauts[id];
         return (nauts.name, nauts.role);
     }
@@ -125,7 +125,7 @@ contract CryptoNauts {
 
     // Deletar navegante
     function deleteNauts(uint256 id) external onlyOwner {
-        require(bytes(_nauts[id].name).length > 0, "Navegante inexistente");
+        require(bytes(_nauts[id].name).length > 0, "Non-existent browser.");
         delete _nauts[id];
 
         //Remove o ID do array nautsIds
@@ -141,7 +141,7 @@ contract CryptoNauts {
     }
 
     modifier onlyOwner {
-        require(msg.sender == owner, "Somente o dono do contrato pode executar.");
+        require(msg.sender == owner, "Only the owner of the contract can execute.");
         _;
     }
 
