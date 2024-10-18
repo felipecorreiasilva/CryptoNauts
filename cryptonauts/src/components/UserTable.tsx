@@ -38,14 +38,15 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
     newRole: '',
     newEmail: '',
   })
-  const selectRole = ['Informe seu papel','Pilot','Captain','Engineer','Member'];
+  const [loading, setLoading] = useState(false);
+  const selectRole = ['Informe seu papel','Pilot','Captain','Engineer','VIP','Member'];
 
-  const expandModalDelete = (id:number,project:any) => {
+  const expandModalDelete = (project:any) => {
     const data = {
-      id,
-      email: project[0],
-      name: project[1],
-      role: project[2],
+      id: project[0],
+      email: project[1],
+      name: project[2],
+      role: project[3],
     }
     setSelectedModalDelete(data);
     setOpenModalDelete(true);
@@ -56,12 +57,13 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
     setOpenModalDelete(false);
   }
 
-  const expandModalEdit = (id:number,project:any) => {
+  const expandModalEdit = (project:any) => {
+    
     const data = {
-      id,
-      email: project[0],
-      name: project[1],
-      role: project[2],
+      id: project[0],
+      email: project[1],
+      name: project[2],
+      role: project[3],
     }
     setSelectedModalEdit(data);
     setOpenModalEdit(true);
@@ -90,7 +92,9 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
   
 
   const handleEditNauts = async (id: number,e:React.FormEvent<HTMLFormElement>) => {
+    
     e.preventDefault()
+    setLoading(true);
     console.log('id: ',id)
     const { provider, signer } = await connectWallet();
     const contractCNauts = new ethers.Contract(addressCNauts, ABI[1], signer);
@@ -115,12 +119,14 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
         let _response = await updateNauts.wait();
         console.log('_response', _response)
         toast.success(`Navegante atualizado com sucesso`)
+        setLoading(false);
     }).catch (async(error:any) =>{
 
     const errorDecoder = ErrorDecoder.create()
     const decodedError: DecodedError = await errorDecoder.decode(error)
     toast.error(`${(decodedError.reason)}`)
     console.log(error)
+    setLoading(false);
 
     })
 
@@ -128,6 +134,7 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
 
   const handleDeleteNauts = async (id: number,e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true);
     console.log('id: ',id)
     const { provider, signer } = await connectWallet();
     const contractCNauts = new ethers.Contract(addressCNauts, ABI[1], signer);
@@ -151,12 +158,14 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
       console.log('_response', deleteNauts)
       console.log('_response', _response)
       toast.success(`Navegante deletado com sucesso`)
+      setLoading(false);
     }).catch(async (error: any) => {
 
       const errorDecoder = ErrorDecoder.create()
       const decodedError: DecodedError = await errorDecoder.decode(error)
       toast.error(`${(decodedError.reason)}`)
       console.log(error)
+      setLoading(false);
 
     })
   }
@@ -182,7 +191,7 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
                 <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{naut.name}</td>
                 <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{naut.email}</td>
                 <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{naut.role}</td>
-                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300"><FaUserEdit onClick={() => expandModalEdit(i,naut)} size={16} className="cursor-pointer ml-2 text-blue-600" />
+                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300"><FaUserEdit onClick={() => expandModalEdit(naut)} size={16} className="cursor-pointer ml-2 text-blue-600" />
                 <Modal open={openModalEdit} onClose={closeModalEdit}>
                     <div className="text-center mx-auto ">
 
@@ -193,27 +202,27 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
                       <div className="flex flex-col space-y-4 w-[80%] mx-auto">
                       
 
-                <label className="relative">
-                  
-                  <input 
-                  required
-                  name='newUsername'
-                  placeholder='Digite seu nome completo' 
-                  className="duration-300 placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-xs shadow-md text-white border rounded-md outline-none 
-                  focus:border-stone-950 peer pl-[16px] p-[6px] bg-inherit w-full"
-                  value={formEditData.newUsername}
-                  onChange={handleOnChange}
-                  type="text" />
-                  <p className='text-white absolute
-                  peer-focus:-translate-y-5 peer-focus:text-sm left-0 top-[6px] ml-2 px-2 duration-300 bg-primary-900 peer-valid:text-sm peer-valid:-translate-y-5'>
-                  Nome
-                  <span 
-                  className='text-red-500 ml-1'>
-                  *</span>
-                  </p>
-                  
-                  
-                </label>
+                      <label className="relative">
+                        
+                        <input 
+                        required
+                        name='newUsername'
+                        placeholder='Digite seu nome completo' 
+                        className="duration-300 placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-xs shadow-md text-white border rounded-md outline-none 
+                        focus:border-stone-950 peer pl-[16px] p-[6px] bg-inherit w-full"
+                        value={formEditData.newUsername}
+                        onChange={handleOnChange}
+                        type="text" />
+                        <p className='text-white absolute
+                        peer-focus:-translate-y-5 peer-focus:text-sm left-0 top-[6px] ml-2 px-2 duration-300 bg-primary-900 peer-valid:text-sm peer-valid:-translate-y-5'>
+                        Nome
+                        <span 
+                        className='text-red-500 ml-1'>
+                        *</span>
+                        </p>
+                        
+                        
+                      </label>
 
                 <label className="relative">
                   
@@ -276,11 +285,34 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
                     className="w-full border-2 text-gray-800 hover:text-white border-gray-800 hover:bg-gray-800 rounded-lg text-center p-[8px]">
                       Cancelar
                       </button>
-                      <button 
+                      <button
+                      disabled={loading} 
                       type="submit"
-                      onClick={(e:any) => handleEditNauts(i,e)} 
+                      onClick={(e:any) => handleEditNauts(Number(naut.id),e)} 
                       className="w-full border-2 text-blue-800 hover:text-white border-blue-800 hover:bg-blue-800 
-                      rounded-lg text-center p-[8px]">Atualizar</button>
+                      rounded-lg text-center p-[8px]">
+                        {loading ? (
+                        <span className="flex justify-center items-center ml-2">
+                          <svg
+                            className="animate-spin h-5 w-5 mr-3"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4" />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v2a6 6 0 00-6 6H4z"
+                            />
+                          </svg>
+                          
+                        </span>
+                        ) : (
+                          'Atualizar'
+                        )}
+                      </button>
                       
                   </div>
     
@@ -299,7 +331,7 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
                 
                 
                 
-                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300"><Trash2 onClick={() => expandModalDelete(i,naut)} size={16} className="cursor-pointer ml-[12px] text-start text-red-600" />
+                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-300"><Trash2 onClick={() => expandModalDelete(naut)} size={16} className="cursor-pointer ml-[12px] text-start text-red-600" />
                   
                   <Modal open={openModalDelete} onClose={closeModalDelete}>
                     <div className="text-center">
@@ -313,10 +345,36 @@ const UserTable = ({ nauts }: InterfaceNauts) => {
                       </div>
                       <div className="flex gap-4 w-[80%] mx-auto py-4">
                         
-                        <button
+                          <button
                           onClick={closeModalDelete}
-                          className="w-full border-2 text-gray-800 hover:text-white border-gray-800 hover:bg-gray-800 rounded-lg text-center p-[8px]">Cancelar</button>
-                          <button onClick={(e:any) => handleDeleteNauts(selectedModalDelete.id,e)} className="w-full border-2 text-red-800 hover:text-white border-red-800 hover:bg-red-800 rounded-lg text-center p-[8px]">Deletar</button>
+                          className="w-full border-2 text-gray-800 hover:text-white border-gray-800 hover:bg-gray-800 
+                          rounded-lg text-center p-[8px]">Cancelar</button>
+                          <button
+                          disabled={loading} 
+                          onClick={(e:any) => handleDeleteNauts(Number(naut.id),e)} 
+                          className="w-full border-2 text-red-800 hover:text-white border-red-800 hover:bg-red-800 rounded-lg text-center p-[8px]">
+                            {loading ? (
+                            <span className="flex justify-center items-center ml-2">
+                              <svg
+                                className="animate-spin h-5 w-5 mr-3"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4" />
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8v2a6 6 0 00-6 6H4z"
+                                />
+                              </svg>
+                              
+                            </span>
+                            ) : (
+                              'Deletar'
+                            )}
+                          </button>
                       </div>
                     </div>
 

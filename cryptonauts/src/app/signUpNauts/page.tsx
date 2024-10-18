@@ -4,7 +4,9 @@ import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card'
 import { useAuth } from '@/context/AuthContext';
 import { ethers } from 'ethers';
 import { DecodedError, ErrorDecoder } from 'ethers-decode-error';
+import Link from 'next/link';
 import React, { useState } from 'react'
+import { FaArrowRight } from 'react-icons/fa';
 import { LiaUserAstronautSolid } from "react-icons/lia";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,17 +24,18 @@ const ABI = [CryptoNautsCoin.abi,CryptoNauts.abi];
 const addressCNCoin = String(process.env.ADDRESS_CNCOIN);
 const addressCNauts = String(process.env.ADDRESS_CNAUTS);
 
-const selectRole = ['Informe seu papel','Pilot','Captain','Engineer','Member'];
+const selectRole = ['Informe seu papel','Pilot','Captain','Engineer','VIP','Member'];
 
 const page = () => {
     
     const {connectWallet,account} = useAuth();
-
+    
     const [formData, setFormData] = useState<SignUpType>({
         username: '',
         role: '',
         email: ''
       });
+    const [loading, setLoading] = useState(false);
 
     const handleOnChange = (e:any)=> {
 
@@ -51,6 +54,7 @@ const page = () => {
 
       const handleSubmit = async(e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setLoading(true)
         const {provider,signer} = await connectWallet();
         
         const gasPrice = (await provider.getFeeData()).gasPrice
@@ -86,13 +90,15 @@ const page = () => {
           console.log('value: ', _transfer)
           console.log('value: ', _response)
           toast.success(`Parabéns registrado como navegante`)
+          setLoading(false)
         }).catch (async(error:any) =>{
 
           const errorDecoder = ErrorDecoder.create()
           const decodedError: DecodedError = await errorDecoder.decode(error)
           console.log(`${(decodedError.reason)}`)
           toast.error(`${(decodedError.reason)}`)
-
+          setLoading(false)
+          
         }) 
           
         
@@ -184,13 +190,37 @@ const page = () => {
                   
                   
                 </label>
-
+                <div className="text-xs text-center text-gray-500 mx-auto">
+                <p>Por apenas 5000 CNCoin você se torna um navegante.</p>
+                <p>CNCoin tem o valor de 5 USD. <Link className='text-cyan-600' href="/buyTokens">Comprar CNCoin.</Link></p>
+                </div>
+                
                 <div className="flex">
                 
                 <button 
                 type='submit'
                 className='w-32 mt-6 ml-auto border-2 text-blue-800 hover:text-white border-blue-800 hover:bg-blue-800 rounded-lg text-center p-[8px]' 
-                >Inscrever-se</button>
+                >{loading ? (
+                        <span className="flex justify-center items-center ml-2">
+                          <svg
+                            className="animate-spin h-5 w-5 mr-3"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4" />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v2a6 6 0 00-6 6H4z"
+                            />
+                          </svg>
+                          
+                        </span>
+                        ) : (
+                          'Inscrever-se'
+                        )}</button>
     
                 </div>
 

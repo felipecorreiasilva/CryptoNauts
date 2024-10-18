@@ -7,6 +7,7 @@ import { MdGeneratingTokens } from "react-icons/md";
 import { ethers, parseUnits } from 'ethers';
 import { DecodedError, ErrorDecoder } from 'ethers-decode-error';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
 
 type buyTokensType = {
   
@@ -22,16 +23,13 @@ const addressCNSale = String(process.env.ADDRESS_CNSALE);
 
 const page = () => {
     const {connectWallet,account} = useAuth()
-    
-    
-    
-
     const [formData, setFormData] = useState<buyTokensType>({
         amount: 0,
       });
+    const [loading, setLoading] = useState(false);
 
     const [contractBalanceOf, setContractBalanceOf] = useState<Number|null>();
-
+    
       useEffect(() => {
         const handleFetchData = async() => {
           const {provider,signer} = await connectWallet();
@@ -63,6 +61,7 @@ const page = () => {
       const handleSubmit = async(e:React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault()
+        setLoading(true)
         const {provider,signer} = await connectWallet();
         
         const contractCNSale = new ethers.Contract(addressCNSale, ABI[1], signer);
@@ -93,13 +92,14 @@ const page = () => {
         console.log('_response', _response)
         toast.success(`Parabéns compra realizada com sucesso`)
         setContractBalanceOf(null)
+        setLoading(false)
         }).catch (async(error:any) =>{
 
           const errorDecoder = ErrorDecoder.create()
           const decodedError: DecodedError = await errorDecoder.decode(error)
           toast.error(`${(decodedError.reason)}`)
           console.log(error)
-
+          setLoading(false)
         }) 
            
       }
@@ -144,12 +144,37 @@ const page = () => {
                   
                 </label>
 
+                <div className="text-xs text-center text-gray-500 mx-auto">
+                <p>CNCoin tem o valor de 5 USD.</p>
+                <p>Se torne um navegante com CNCoin. <Link className='text-cyan-600' href="/signUpNauts">Inscrever-se.</Link></p>
+                </div>
+
                 <div className="flex">
                 
                 <button 
                 type='submit'
                 className='w-32 mt-6 ml-auto border-2 text-black hover:text-white border-black hover:bg-black rounded-lg text-center p-[8px]' 
-                >Comprar</button>
+                >{loading ? (
+                  <span className="flex justify-center items-center ml-2">
+                    <svg
+                      className="animate-spin h-5 w-5 mr-3"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4" />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v2a6 6 0 00-6 6H4z"
+                      />
+                    </svg>
+                    
+                  </span>
+                  ) : (
+                    'Comprar'
+                  )}</button>
     
                 </div>
 
