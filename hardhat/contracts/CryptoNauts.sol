@@ -15,6 +15,7 @@ contract CryptoNauts {
     
 
     struct Nauts {
+        uint256 id;
         string email;
         string name;
         string role;
@@ -69,17 +70,17 @@ contract CryptoNauts {
         
         // check that the sale contract provides the enough tokens to make this transaction
         require(token.balanceOf(msg.sender) >= priceRegister, "Not enough tokens.");
-
+        
         // Adicionado novo id de navegante em nautsIds
         nautsIds.push(uint256(nautsIds.length));
-        _nauts[uint256(nautsIds.length)-1] = Nauts(_email, _name, _role);
+        _nauts[uint256(nautsIds.length)-1] = Nauts(uint256(nautsIds.length)-1,_email, _name, _role);
         emit NautsInfo(uint256(nautsIds.length)-1, _name, _role); 
 
     }
     
 
     // Atualizar Navegantes
-    function updateNauts(uint256 id, string calldata _newEmail, string calldata _newName, string calldata _newRole) external onlyOwner {
+    function updateNauts(uint256 _id, string calldata _newEmail, string calldata _newName, string calldata _newRole) external onlyOwner {
         
         bool _nautsExists = nautsExistsByEmail(_newEmail);
 
@@ -89,8 +90,8 @@ contract CryptoNauts {
         require(bytes(_newRole).length >= 3, "Role must contain at least 3 digits."); 
         
         // Adicionado novo id de navegante em nautsIds
-        _nauts[id] = Nauts(_newEmail, _newName, _newRole);
-        emit NautsInfo(id, _newName, _newRole);
+        _nauts[_id] = Nauts(_id, _newEmail, _newName, _newRole);
+        emit NautsInfo(_id, _newName, _newRole);
         
     }
 
@@ -108,10 +109,10 @@ contract CryptoNauts {
     }
 
     // Pega navegante por id
-    function getNauts(uint256 id) external view returns (string memory, string memory) {
+    function getNauts(uint256 id) external view returns (uint256,string memory,string memory, string memory) {
         require(bytes(_nauts[id].name).length > 0, "Non-existent browser.");
         Nauts storage nauts = _nauts[id];
-        return (nauts.name, nauts.role);
+        return (nauts.id,nauts.name,nauts.email, nauts.role);
     }
 
     // Pegar lista de navegantes
