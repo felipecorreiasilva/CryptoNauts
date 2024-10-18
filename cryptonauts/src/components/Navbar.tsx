@@ -18,7 +18,7 @@ const Navbar = () => {
   return (
     <>
     {isClient &&
-    <nav className='fixed container z-1 w-full bg-primary-950'>
+    <nav className='fixed container z-10 w-full bg-primary-950'>
 
         <ul className='hidden sm:flex justify-between p-8 text-white'>
             <div className="">
